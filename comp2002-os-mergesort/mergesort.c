@@ -46,7 +46,7 @@ void * parallel_mergesort(void *arg){
 	int right = a->right;
 	int level = a->level;
 	
-	if (level <= 0 || left >= right) {
+	if (level >= cutoff || left >= right) {
 		my_mergesort(left, right);
 		return NULL;
 	}
@@ -55,8 +55,8 @@ void * parallel_mergesort(void *arg){
 
 	pthread_t leftThread, rightThread;
 	
-    struct argument *leftArg = buildArgs(left, mid, level-1);
-    struct argument *rightArg = buildArgs(mid+1, right, level-1);
+    struct argument *leftArg = buildArgs(left, mid, level+1);
+    struct argument *rightArg = buildArgs(mid+1, right, level+1);
 
 	pthread_create(&leftThread, NULL, parallel_mergesort, leftArg);
 	pthread_create(&rightThread, NULL, parallel_mergesort, rightArg);
